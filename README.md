@@ -1,4 +1,4 @@
-# passport-google-oauth20
+# passport-google-oauth20 & passport-local with mysql database
 
 [Passport](http://passportjs.org/) strategy for authenticating with [Google](http://www.google.com/)
 using the OAuth 2.0 API.
