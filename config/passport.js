@@ -1,11 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy;
 const mysql = require('mysql');
-
+const mysql_conf = require('./mysql_config');
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user:'root',
-    password: '',
-    database:'upwork'
+    host: mysql_conf.HOST,
+    user: mysql_conf.USERNAME,
+    password: mysql_conf.PASSWORD,
+    database: mysql_conf.DATABASE
     });
 connection.connect((err)=>{
     if(err) throw err;
@@ -16,7 +16,7 @@ module.exports = function(passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'name' }, (name, password, done) => {
       // Match user
-        connection.query("SELECT * from user where name='" + name  + "'", function(err, rows, fields) {
+        connection.query("SELECT * from " + mysql_conf.USERTABLE + " where name='" + name  + "'", function(err, rows, fields) {
             if (!err){
                 const user = rows[0];
                 if(user.password == password) {
@@ -40,7 +40,7 @@ module.exports = function(passport) {
   });
 
   passport.deserializeUser(function(id, done) {
-    connection.query("SELECT * from user where id=" + id , function(err, rows, fields) {
+    connection.query("SELECT * from " + mysql_conf.USERTABLE + " where id=" + id , function(err, rows, fields) {
         if (!err){
             const user = rows[0];
             return done(err, user);
